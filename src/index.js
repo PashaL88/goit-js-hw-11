@@ -40,13 +40,14 @@ const onSubmit = async event => {
 };
 
 const onButtonClick = async event => {
-  const imageEls = document.querySelectorAll('.image');
-  const imageElsOnPage = imageEls.length + 40;
-  console.log(imageElsOnPage);
   pixabayApi.page += 1;
+
   try {
     const photosResponse = await pixabayApi.fetchPhotos();
-    if (imageElsOnPage >= photosResponse.data.totalHits) {
+    const imageEls = document.querySelectorAll('.image');
+    const imageElsOnPage = imageEls.length;
+
+    if (imageElsOnPage > photosResponse.data.totalHits) {
       buttonEl.classList.add('is-hidden');
       Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
     }
