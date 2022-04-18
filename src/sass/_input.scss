@@ -1,0 +1,27 @@
+.search-form {
+    display: flex;
+    justify-content: center;
+    padding: 3px;
+    background-color: rgb(40, 80, 180);}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.photo-card {
+    margin: 5px;
+}
+.item-description {
+    margin-right: 2px;
+}
+
+.load-more {
+    display: block;
+margin: 0, auto;
+}
+
+.is-hidden {
+    opacity: 0;
+}
