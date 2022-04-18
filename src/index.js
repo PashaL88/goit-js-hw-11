@@ -25,6 +25,7 @@ const onSubmit = async event => {
   }
   try {
     const photosResponse = await pixabayApi.fetchPhotos();
+    pixabayApi.totalPage = Math.floor(photosResponse.data.totalHits / 40);
     if (photosResponse.data.totalHits === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.',
@@ -41,13 +42,14 @@ const onSubmit = async event => {
 
 const onButtonClick = async event => {
   pixabayApi.page += 1;
+  console.log(pixabayApi.totalPage);
 
   try {
     const photosResponse = await pixabayApi.fetchPhotos();
-    const imageEls = document.querySelectorAll('.image');
-    const imageElsOnPage = imageEls.length;
+    // const imageEls = document.querySelectorAll('.image');
+    //const imageElsOnPage = imageEls.length;
 
-    if (imageElsOnPage > photosResponse.data.totalHits) {
+    if (pixabayApi.page === pixabayApi.totalPage) {
       buttonEl.classList.add('is-hidden');
       Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
     }

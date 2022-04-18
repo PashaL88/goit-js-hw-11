@@ -6,6 +6,7 @@ export class PixabayApi {
   constructor() {
     this.page = 1;
     this.query = null;
+    this.totalPage = null;
   }
   async fetchPhotos() {
     try {
