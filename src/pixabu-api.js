@@ -9,14 +9,17 @@ export class PixabayApi {
     this.totalPage = null;
   }
   async fetchPhotos() {
+    const params = new URLSearchParams({
+      q: this.query,
+      image_type: this.photo,
+      orientatiom: this.horizontal,
+      safesearch: this.true,
+      page: this.page,
+      per_page: 40,
+      key: this.#API_KEY,
+    });
     try {
-      return axios.get(
-        `${this.#BASE_URL}?q=${
-          this.query
-        }&image_type=photo&orientation=horizontal&safesearch=true&page=${
-          this.page
-        }&per_page=40&key=${this.#API_KEY}`,
-      );
+      return axios.get(`${this.#BASE_URL}?${params}`);
     } catch (err) {
       console.log(err);
     }

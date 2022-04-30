@@ -2,7 +2,8 @@
     display: flex;
     justify-content: center;
     padding: 3px;
-    background-color: rgb(21, 77, 218);}
+    background-color: rgb(21, 77, 218);
+}
 
 .gallery {
     display: flex;
@@ -12,7 +13,20 @@
 
 .photo-card {
     margin: 10px;
+    padding: 5px;
+    border-radius: 4px;
+  box-shadow: 5px 5px 4px 2px rgba(0, 0, 0, 0.3);
 }
+.info {
+    display: flex;
+    justify-content: center;
+}
+.info-item {
+    justify-content: center;
+    margin-left: 10px;
+}
+
+
 .item-description {
     margin-right: 2px;
 }

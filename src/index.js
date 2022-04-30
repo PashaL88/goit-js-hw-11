@@ -42,7 +42,6 @@ const onSubmit = async event => {
 
 const onButtonClick = async event => {
   pixabayApi.page += 1;
-  console.log(pixabayApi.totalPage);
 
   try {
     const photosResponse = await pixabayApi.fetchPhotos();
