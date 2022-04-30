@@ -33,6 +33,12 @@ const onSubmit = async event => {
       return;
     }
     galleryEl.innerHTML = createGalleryCard(photosResponse.data.hits);
+    const { height: cardHeight } = galleryEl.firstElementChild.getBoundingClientRect();
+
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: 'smooth',
+    });
     let lightbox = new SimpleLightbox('.gallery a');
     buttonEl.classList.remove('is-hidden');
   } catch (err) {
@@ -45,14 +51,18 @@ const onButtonClick = async event => {
 
   try {
     const photosResponse = await pixabayApi.fetchPhotos();
-    // const imageEls = document.querySelectorAll('.image');
-    //const imageElsOnPage = imageEls.length;
 
     if (pixabayApi.page === pixabayApi.totalPage) {
       buttonEl.classList.add('is-hidden');
       Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
     }
     galleryEl.insertAdjacentHTML('beforeend', createGalleryCard(photosResponse.data.hits));
+    const { height: cardHeight } = galleryEl.firstElementChild.getBoundingClientRect();
+
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: 'smooth',
+    });
     let lightbox = new SimpleLightbox('.gallery a');
   } catch (err) {
     console.log(err);
