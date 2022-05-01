@@ -19,7 +19,7 @@ export class PixabayApi {
       key: this.#API_KEY,
     });
     try {
-      return axios.get(`${this.#BASE_URL}?${params}`);
+      return await axios.get(`${this.#BASE_URL}?${params}`);
     } catch (err) {
       console.log(err);
     }

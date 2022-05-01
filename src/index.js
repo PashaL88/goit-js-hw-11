@@ -1,5 +1,5 @@
 import './sass/main.scss';
-import axios from 'axios';
+// import axios from 'axios';
 import Notiflix from 'notiflix';
 import { PixabayApi } from './pixabu-api';
 import createGalleryCard from './partials/createGalleryCard';
@@ -9,7 +9,41 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 const formEl = document.querySelector('.search-form');
 const inputEl = document.querySelector('input[name="searchQuery"]');
 const galleryEl = document.querySelector('.gallery');
-const buttonEl = document.querySelector('.load-more');
+const observeEl = document.querySelector('.target-element');
+// const buttonEl = document.querySelector('.load-more');
+const options = {
+  root: null,
+  rootMargin: '200px',
+  threshold: 1.0,
+};
+
+const observer = new IntersectionObserver((entries, observe) => {
+  entries.forEach(async entry => {
+    if (entry.isIntersecting) {
+      pixabayApi.page += 1;
+
+      try {
+        const photosResponse = await pixabayApi.fetchPhotos();
+
+        if (pixabayApi.page === pixabayApi.totalPage) {
+          // buttonEl.classList.add('is-hidden');
+          observer.unobserve(observeEl);
+          Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+        }
+        galleryEl.insertAdjacentHTML('beforeend', createGalleryCard(photosResponse.data.hits));
+        const { height: cardHeight } = galleryEl.firstElementChild.getBoundingClientRect();
+
+        window.scrollBy({
+          top: cardHeight * 2,
+          behavior: 'smooth',
+        });
+        let lightbox = new SimpleLightbox('.gallery a');
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  });
+}, options);
 
 const pixabayApi = new PixabayApi();
 
@@ -32,42 +66,45 @@ const onSubmit = async event => {
       );
       return;
     }
-    galleryEl.innerHTML = createGalleryCard(photosResponse.data.hits);
-    const { height: cardHeight } = galleryEl.firstElementChild.getBoundingClientRect();
+    // galleryEl.innerHTML = createGalleryCard(photosResponse.data.hits);
+    // const { height: cardHeight } = galleryEl.firstElementChild.getBoundingClientRect();
 
-    window.scrollBy({
-      top: cardHeight * 2,
-      behavior: 'smooth',
-    });
+    // window.scrollBy({
+    //   top: cardHeight * 2,
+    //   behavior: 'smooth',
+    // });
+
+    observer.observe(observeEl);
+
     let lightbox = new SimpleLightbox('.gallery a');
-    buttonEl.classList.remove('is-hidden');
+    // buttonEl.classList.remove('is-hidden');
   } catch (err) {
     console.log(error);
   }
 };
 
-const onButtonClick = async event => {
-  pixabayApi.page += 1;
+// const onButtonClick = async event => {
+//   pixabayApi.page += 1;
 
-  try {
-    const photosResponse = await pixabayApi.fetchPhotos();
+//   try {
+//     const photosResponse = await pixabayApi.fetchPhotos();
 
-    if (pixabayApi.page === pixabayApi.totalPage) {
-      buttonEl.classList.add('is-hidden');
-      Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-    }
-    galleryEl.insertAdjacentHTML('beforeend', createGalleryCard(photosResponse.data.hits));
-    const { height: cardHeight } = galleryEl.firstElementChild.getBoundingClientRect();
+//     if (pixabayApi.page === pixabayApi.totalPage) {
+//       buttonEl.classList.add('is-hidden');
+//       Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+//     }
+//     galleryEl.insertAdjacentHTML('beforeend', createGalleryCard(photosResponse.data.hits));
+//     const { height: cardHeight } = galleryEl.firstElementChild.getBoundingClientRect();
 
-    window.scrollBy({
-      top: cardHeight * 2,
-      behavior: 'smooth',
-    });
-    let lightbox = new SimpleLightbox('.gallery a');
-  } catch (err) {
-    console.log(err);
-  }
-};
+//     window.scrollBy({
+//       top: cardHeight * 2,
+//       behavior: 'smooth',
+//     });
+//     let lightbox = new SimpleLightbox('.gallery a');
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
 formEl.addEventListener('submit', onSubmit);
-buttonEl.addEventListener('click', onButtonClick);
+// buttonEl.addEventListener('click', onButtonClick);
